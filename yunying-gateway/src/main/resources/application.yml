@@ -1,0 +1,29 @@
+server:
+  port: 8080
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: yunying-gateway # ?????
+  profiles:
+    active: dev
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181 # ?????ZooKeeper??
+      discovery:
+        enabled: true
+    gateway:
+      routes:
+        - id: yunying-ai
+          uri: http://localhost:8081/yunying-ai/
+          predicates:
+            - Path=/ai/**
+        - id: yunying-server
+          uri: http://localhost:8082/yunying-server/
+          #          uri: lb://yunying-server
+          predicates:
+            - Path=/**
+        - id: yunying-gh
+          uri: http://localhost:8083/yunying-gh/
+          predicates:
+            - Path=/gh/**

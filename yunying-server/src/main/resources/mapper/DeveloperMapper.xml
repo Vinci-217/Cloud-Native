@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunying.server.mapper.DeveloperMapper">
+
+
+    <select id="selectByField" resultType="java.util.Map">
+        SELECT d.*, c.field, c.field_conf
+        FROM developer d
+                 JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY dev_id ORDER BY field_conf DESC) AS rn
+                       FROM contribution
+                       WHERE field = #{field}) c ON d.dev_id = c.dev_id AND c.rn = 1
+        ORDER BY d.talent_rank DESC
+        LIMIT #{limit} OFFSET #{offset};
+    </select>
+
+    <select id="selectByNation" resultType="java.util.Map">
+        SELECT d.*, c.field, c.field_conf
+        FROM developer d
+                 JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY dev_id ORDER BY field_conf DESC) AS rn
+                       FROM contribution) c ON d.dev_id = c.dev_id AND c.rn = 1
+        WHERE d.nation = #{nation}
+        ORDER BY d.talent_rank DESC
+        LIMIT #{limit} OFFSET #{offset};
+    </select>
+    <select id="selectByFieldAndNation" resultType="java.util.Map">
+        SELECT d.*, c.field, c.field_conf
+        FROM developer d
+                 JOIN (SELECT *, ROW_NUMBER() OVER (PARTITION BY dev_id ORDER BY field_conf DESC) AS rn
+                       FROM contribution
+                       WHERE field = #{field}) c ON d.dev_id = c.dev_id AND c.rn = 1
+        WHERE d.nation = #{nation}
+        ORDER BY d.talent_rank DESC
+        LIMIT #{limit} OFFSET #{offset};
+    </select>
+    <select id="selectByPage" resultType="java.util.Map">
+        SELECT d.*, c.field, c.field_conf
+        FROM developer d
+                 JOIN contribution c ON d.dev_id = c.dev_id
+        ORDER BY d.talent_rank
+        LIMIT #{limit} OFFSET #{offset};
+    </select>
+    <select id="selectNation" resultType="java.lang.String">
+        SELECT DISTINCT nation
+        FROM developer;
+    </select>
+    <select id="selectField" resultType="java.lang.String">
+        SELECT DISTINCT field
+        FROM contribution;
+    </select>
+    <select id="selectContribution" resultType="java.util.Map" parameterType="java.lang.Integer">
+        SELECT *
+        FROM repository
+        WHERE repo_id IN (SELECT repo_id
+                          FROM contribution
+                          WHERE dev_id = #{devId})
+    </select>
+    <select id="selectLanguageByDevId" resultType="java.lang.String">
+        SELECT `language`
+        FROM `repository`
+        WHERE owner_id = #{devId}
+    </select>
+
+
+</mapper>

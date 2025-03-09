@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunying.gh.mapper.DeveloperMapper">
+
+    <select id="findMutualFollow" resultType="com.yunying.gh.domain.Developer"
+            parameterType="java.lang.Integer">
+        SELECT *
+        FROM follower A
+                 INNER JOIN following B ON A.dev_id = B.dev_id
+        WHERE A.following_id = #{dev_id}
+          AND B.follower_id = #{dev_id};
+    </select>
+    <select id="selectFollowers" resultType="com.yunying.gh.domain.Follower"
+            parameterType="java.lang.Integer">
+        SELECT *
+        FROM follower
+        WHERE following_id = #{devId};
+    </select>
+    <select id="selectFollowing" resultType="com.yunying.gh.domain.Following"
+            parameterType="java.lang.Integer">
+        SELECT *
+        FROM following
+        WHERE follower_id = #{devId};
+    </select>
+</mapper>

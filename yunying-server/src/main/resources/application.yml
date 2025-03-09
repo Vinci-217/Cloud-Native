@@ -1,0 +1,83 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: yunying-server
+  profiles:
+    active: dev
+  datasource:
+    url: ${yunying.datasource.url}
+    username: ${yunying.datasource.username}
+    password: ${yunying.datasource.password}
+    driver-class-name: ${yunying.datasource.driver-class-name}
+
+  rabbitmq:
+    host: ${yunying.rabbitmq.host} # 你的虚拟机IP
+    port: ${yunying.rabbitmq.port} # 端口
+    virtual-host: ${yunying.rabbitmq.virtual-host} # 虚拟主机
+    username: ${yunying.rabbitmq.username} # 用户名
+    password: ${yunying.rabbitmq.password} # 密码
+
+  #
+  #  rabbitmq:
+  #    host: localhost
+  #    port: 5672
+  #    username: guest
+  #    password: guest
+
+  cloud:
+    zookeeper:
+      connect-string: ${yunying.zookeeper.connect-string} # 替换为你的ZooKeeper地址
+      discovery:
+        enabled: true
+      config:
+        enabled: true
+        root: /config # 配置根路径
+    openfeign:
+      okhttp:
+        enabled: true
+      client:
+        config:
+          default:
+            connectTimeout: 10000
+            readTimeout: 10000
+            loggerLevel: basic
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+
+elasticsearch:
+  uris: ${yunying.elasticsearch.uris} # 替换为你的ElasticSearch地址
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      query:
+        slidingWindowSize: 10               # 熔断器统计窗口大小
+        minimumNumberOfCalls: 5             # 至少5个请求后才进行熔断计算
+        failureRateThreshold: 50            # 失败率阈值（%）
+        waitDurationInOpenState: 10s        # 熔断后等待10秒再进行重试
+        permittedNumberOfCallsInHalfOpenState: 3  # 半开状态下允许的请求数
+
+  ratelimiter:
+    instances:
+      query:
+        limitForPeriod: 10                # 每个时间窗口的最大请求数
+        limitRefreshPeriod: 1s            # 限流器刷新频率（时间窗口大小）
+        timeoutDuration: 500ms            # 获取许可的超时时间
+      myServiceRateLimiter:
+        limitForPeriod: 1
+        limitRefreshPeriod: 240s
+        timeoutDuration: 500ms
+
+
+mybatis-plus:
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
+  global-config:
+    db-config:
+      update-strategy: not_null
+      id-type: auto
