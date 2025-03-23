@@ -1,9 +1,11 @@
 package com.yunying.gh.controller;
 
 import com.yunying.common.utils.Result;
+import com.yunying.gh.service.AIClient;
 import com.yunying.gh.service.GithubService;
 import com.yunying.gh.service.IDeveloperService;
 import com.yunying.gh.service.IRepositoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.GHRepository;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RestController
 @RequestMapping("/github")
 public class GithubController {
@@ -34,6 +37,9 @@ public class GithubController {
     @Autowired
     private IRepositoryService repositoryService;
 
+    @Autowired
+    private AIClient aiClient;
+
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -44,14 +50,16 @@ public class GithubController {
     // 获取仓库信息的 API
     @GetMapping("/repo")
     public Result<String> getRepoInfo(@RequestParam String owner, @RequestParam String repoName) {
-        try {
-            GHRepository repo = gitHubService.getRepositoryInfo(owner, repoName);
-            String result = "Repository: " + repo.getName() + ", Language: " + repo.getLanguage() + ", Stars: " + repo.getStargazersCount();
-            return Result.success(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error(e.getMessage());
-        }
+        log.info("gh-ok");
+        return Result.success("ok");
+//        try {
+//            GHRepository repo = gitHubService.getRepositoryInfo(owner, repoName);
+//            String result = "Repository: " + repo.getName() + ", Language: " + repo.getLanguage() + ", Stars: " + repo.getStargazersCount();
+//            return Result.success(result);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Result.error(e.getMessage());
+//        }
     }
 
     // 获取仓库的 Star 数量的 API
@@ -144,6 +152,11 @@ public class GithubController {
     public Result<String> updateDeveloperInfo() {
 
         return Result.success("success");
+    }
+
+    @PostMapping("/test")
+    public Result<String> test(){
+        return Result.success(aiClient.test());
     }
 
 

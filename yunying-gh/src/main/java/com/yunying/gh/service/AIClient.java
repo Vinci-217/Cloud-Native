@@ -1,5 +1,6 @@
 package com.yunying.gh.service;
 
+import com.yunying.common.utils.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,4 +14,6 @@ public interface AIClient {
     @PostMapping("/ai/field")
     String getField(@RequestParam("devLogin") String devLogin, @RequestParam("content") String content);
 
+    @PostMapping("/ai/test")
+    String test();
 }

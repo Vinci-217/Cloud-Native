@@ -15,15 +15,14 @@ spring:
     gateway:
       routes:
         - id: yunying-ai
-          uri: http://localhost:8081/yunying-ai/
+          uri: http://localhost:8081/yunying-ai
           predicates:
             - Path=/ai/**
+        - id: yunying-gh
+          uri: http://localhost:8083/yunying-gh
+          predicates:
+            - Path=/github/**
         - id: yunying-server
           uri: http://localhost:8082/yunying-server/
-          #          uri: lb://yunying-server
           predicates:
             - Path=/**
-        - id: yunying-gh
-          uri: http://localhost:8083/yunying-gh/
-          predicates:
-            - Path=/gh/**

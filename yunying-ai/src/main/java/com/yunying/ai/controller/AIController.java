@@ -4,11 +4,11 @@ package com.yunying.ai.controller;
 import com.yunying.common.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+//import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
+//import org.springframework.ai.vectorstore.SearchRequest;
+//import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +26,8 @@ public class AIController {
     @Autowired
     private ChatClient chatClient;
 
-    @Autowired
-    private VectorStore vectorStore;
+//    @Autowired
+//    private VectorStore vectorStore;
 
     // 历史消息列表
     static List<Message> historyMessage = new ArrayList<>();
@@ -66,15 +66,15 @@ public class AIController {
         String userInput = "我是" + devLogin + "，请你针对Github的开源数据给我一个综合评估报告。我的数据如下：" +
                 content;
         // 发起聊天请求并处理响应
-        String output = chatClient.prompt()
-                .messages()
-                .user(userInput)
-//                .advisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
-                .call()
-                .content();
+//        String output = chatClient.prompt()
+//                .messages()
+//                .user(userInput)
+////                .advisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
+//                .call()
+//                .content();
 
 
-        return output;
+        return userInput;
     }
 
     @PostMapping(value = "/field", produces = "text/plain; charset=UTF-8")
@@ -92,6 +92,11 @@ public class AIController {
 
 
         return output;
+    }
+
+    @PostMapping("/test")
+    public String test(){
+        return "success";
     }
 
 

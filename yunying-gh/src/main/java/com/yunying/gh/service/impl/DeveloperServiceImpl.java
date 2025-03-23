@@ -168,10 +168,11 @@ public class DeveloperServiceImpl extends ServiceImpl<DeveloperMapper, Developer
         queryWrapper.eq("dev_login", devLogin);
         Developer developer = developerMapper.selectOne(queryWrapper);
         String content = developer.toString();
-//        String report = aIClient.getReport(devLogin, content);
+        String report = aIClient.getReport(devLogin, content);
 //        developer.setProfile(report);
         developer.setProfile("你是一个很优秀的开发者，击败了99%的用户");
-        updateById(developer);
+//        updateById(developer);
+        System.out.println(report);
         return true;
     }
 

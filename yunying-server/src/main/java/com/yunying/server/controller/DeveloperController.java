@@ -12,6 +12,7 @@ import com.yunying.server.service.IDeveloperService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBucket;
 import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -38,6 +39,7 @@ import java.util.concurrent.*;
  */
 @RestController
 @RequestMapping("/developer")
+@Slf4j
 public class DeveloperController {
 
     @Autowired
@@ -128,6 +130,7 @@ public class DeveloperController {
     @GetMapping("/select/nation")
     @CrossOrigin("http://localhost:3000")
     public Result<List<String>> selectNation() {
+        log.info("ok");
         List<String> nations = developerService.selectNation();
         return Result.success(nations);
     }
