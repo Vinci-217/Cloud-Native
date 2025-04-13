@@ -4,25 +4,26 @@ spring:
   main:
     web-application-type: reactive
   application:
-    name: yunying-gateway # ?????
+    name: yunying-gateway  # 服务名称，用于注册到Zookeeper
   profiles:
     active: dev
   cloud:
     zookeeper:
-      connect-string: localhost:2181 # ?????ZooKeeper??
+      connect-string: zookeeper:2181  # 使用容器服务名（非localhost）
       discovery:
         enabled: true
     gateway:
       routes:
         - id: yunying-ai
-          uri: http://localhost:8081/yunying-ai
+          # 使用服务发现名称（需确保其他服务注册到Zookeeper）
+          uri: lb://yunying-ai
           predicates:
             - Path=/ai/**
         - id: yunying-gh
-          uri: http://localhost:8083/yunying-gh
+          uri: lb://yunying-gh
           predicates:
             - Path=/github/**
         - id: yunying-server
-          uri: http://localhost:8082/yunying-server/
+          uri: lb://yunying-server
           predicates:
             - Path=/**
